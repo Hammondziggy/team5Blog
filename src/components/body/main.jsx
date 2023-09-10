@@ -6,12 +6,8 @@ import HeaderAndFilter from "./mainHeader";
 
 const Main = () => {
   const { articlesData } = useGlobalContext();
-  // const [article, setArticle] = useState([]);
+// const [article, setArticle] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Latest Articles");
-
-  // useEffect(() => {
-  //     setArticle(articlesData);
-  // }, []);
 
   const showSeeAllLink = articlesData.length > 3 * 2;
   const articlesToDisplay = showSeeAllLink
@@ -56,8 +52,6 @@ const Main = () => {
                 }}
               />
             );
-            // const JsonText = JSON.stringify(text);
-            console.log(text);
             return (
               <div
                 key={index}
@@ -103,9 +97,6 @@ const Main = () => {
                       <i className="bx bx-right-arrow-alt"></i>
                     </Link>
                   </div>
-                  {/* <p className="text-gray-600 font-sans mb-4 pb-2">
-                    {truncateText(articles.content, 100)}
-                  </p> */}
                 </div>
               </div>
             );
