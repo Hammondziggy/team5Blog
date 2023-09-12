@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+// import { mockData } from './mock';
 import { useGlobalContext } from "../context";
 import images from "../../UI/constants/images";
-import HeaderAndFilter from "./mainHeader";
+import SubHeaderAndFilter from "./subArticlesHeader";
 import LatestArticleSkeleton from "../Skeleton/LatestArticleSkeleton";
 
-const Main = () => {
+const SubArticles = () => {
   const { articlesData } = useGlobalContext();
-// const [article, setArticle] = useState([]);
+  const [article, setArticle] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Latest Articles");
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 16; // 4 rows * 4 columns = 16 articles per page
 
-  const showSeeAllLink = articlesData.length > 3 * 2;
-  const articlesToDisplay = showSeeAllLink
-    ? articlesData.slice(0, 3 * 2)
-    : articlesData;
+  useEffect(() => {
+    setArticle(articlesData);
+  }, []);
 
-  let filteredArticles = articlesToDisplay.filter((article) => {
-    return (
-      selectedCategory === "Latest Articles" ||
-      article.category === selectedCategory
-    );
-  });
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(article.length / articlesPerPage);
+
+  // Update the filteredArticles array based on the current page
+  const startIndex = (currentPage - 1) * articlesPerPage;
+  const endIndex = startIndex + articlesPerPage;
+  const filteredArticles = article.slice(startIndex, endIndex);
 
   const categories = [
     "Latest Articles",
@@ -30,14 +33,29 @@ const Main = () => {
     "UI/UX",
     "Security",
   ];
+
+  // Function to handle previous page
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Function to handle next page
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
-    <div className="lg:w-[1100px] lg:mx-auto max-w-full">
-      <HeaderAndFilter
+    <>
+      <SubHeaderAndFilter
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={(category) => setSelectedCategory(category)}
       />
-      <div className=" grid grid-cols-1 md:grid-cols-3 w-full">
+      <div className="m-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredArticles.length === 0
           ? [1, 2, 3, 4, 5, 6].map((_, id) => (
               <LatestArticleSkeleton key={id} />
@@ -51,7 +69,6 @@ const Main = () => {
                   }}
                 />
               );
-
               return (
                 <div
                   key={index}
@@ -81,7 +98,6 @@ const Main = () => {
                       <p className="text-sm p-main-text">{article.category}</p>
                       <div className="w-10 h-[1px] bg-light-text dark:bg-dark-text" />
                     </div>
-                    {/* {truncateText(text, 100)} */}
                     <div
                       dangerouslySetInnerHTML={{
                         __html: text.props.dangerouslySetInnerHTML.__html.slice(
@@ -118,19 +134,33 @@ const Main = () => {
               );
             })}
       </div>
-      <div className="w-20 ml-auto mt-4 mb-3">
-        {showSeeAllLink && (
-          <Link
-            to="/subArticles"
-            className="text-hover-dark font-bold font-sans hover:border  text-right flex"
-          >
-            See All
-            <i className="bx bx-chevron-right bx-sm"></i>
-          </Link>
-        )}
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={handlePrevPage}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-l-lg ${
+            currentPage === 1 ? "disabled:opacity-50" : ""
+          }`}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2 text-blue-500">
+          {currentPage} / {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-r-lg ${
+            currentPage === totalPages ? "disabled:opacity-50" : ""
+          }`}
+        >
+          Next
+        </button>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Main;
+export default SubArticles;
