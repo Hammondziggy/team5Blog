@@ -14,6 +14,7 @@ function CreateAccount() {
     setConfirmNewPassword,
     createAccount,
     emailValidMessage,
+    loading,
   } = useGlobalContext();
   return (
     <div className="flex flex-col items-center bg-light-body dark:bg-dark-body ">
@@ -86,7 +87,11 @@ function CreateAccount() {
           className="w-full text-light-text dark:text-dark-text bg-head-blue p-2 round my-4"
           onClick={() => createAccount()}
         >
-          CREATE ACCOUNT
+          {!loading ? (
+            "CREATE ACCOUNT"
+          ) : (
+            <i className="bx bxs-bullseye bx-spin bx-sm"></i>
+          )}
         </button>
         <hr />
         <p className="text-center">

@@ -10,7 +10,7 @@
 
 body {
   font-family: "Inconsolata", "sans-serif", "Merriweather", "serif";
-  @apply bg-light-body;
+  @apply bg-light-body dark:bg-dark-body;
 }
 
 @layer base {
@@ -125,5 +125,42 @@ a {
   .signIn,
   .createAccount {
     width: 85%;
+  }
+}
+
+.d-text > * {
+  display: inline;
+}
+
+/* Animation For Offline Mode   */
+.animate-wrapper {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 100%;
+  height: 80%;
+  border-radius: 50%;
+  /* animation: pulse 2.5s infinite; */
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.animate {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.6;
   }
 }

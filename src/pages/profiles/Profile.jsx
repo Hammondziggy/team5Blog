@@ -24,12 +24,10 @@ const Profile = () => {
     commentsAvailability,
   } = useGlobalContext();
 
-    console.log(articlesData);
   // Function To Handle Search To Filter Posts
   const handleSearchValue = (e) => {
     let value = e.target.value;
     setInputSearch(value);
-    console.log(inputSearch);
   };
   const handleCommentValue = (e) => {
     let value = e.target.value;
@@ -82,20 +80,17 @@ const Profile = () => {
       message: inputComment,
     };
 
-    setA(newComment)
-    console.log(newComment);
+    setA(newComment);
 
     const arr = [];
     arr.push(newComment);
-    
-    setDisplayedPost(arr);
 
+    setDisplayedPost(arr);
 
     // setAddAdmin("");
     const updateRole = { comments: comments.push(newComment) };
     const userDoc = doc(db, "Posts", updatedId);
     await updateDoc(userDoc, updateRole);
-
 
     // updateComments.push(newComment);
     setScroll(true);
@@ -136,7 +131,7 @@ const Profile = () => {
           <h1 className="text-3xl">Hello, {name}</h1>
           {isAdmin && (
             <Link
-              to="/admin/jamesisrael/new-post"
+              to={`/admin/@${name}/new-post`}
               className="capitalize text-xs text-hover-dark mt-2 cursor-pointer flex items-center gap-1 hover:text-dark-footer dark:text-light-body dark:hover:text-border-light border p-2 rounded-3xl"
             >
               <i className="bx bxs-edit bx-sm"></i> Write Code
@@ -181,17 +176,15 @@ const Profile = () => {
         )}
         {displayedPost.length >= 1 && (
           <Comments messages={inputComment}>
-            {
-              displayedPost.map((item) => {
-                return (
-                  <SingleComment
-                    name={item.username}
-                    img={item.img}
-                    message={item.message}
-                  />
-                );
-              })
-            }
+            {displayedPost.map((item) => {
+              return (
+                <SingleComment
+                  name={item.username}
+                  img={item.img}
+                  message={item.message}
+                />
+              );
+            })}
           </Comments>
         )}
         <div className="absolute bottom-4 p-0 w-[85%] font-sans">

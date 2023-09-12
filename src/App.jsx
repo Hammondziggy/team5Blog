@@ -8,16 +8,17 @@ import Home from "./pages/Home";
 import About from "./pages/about";
 import SubArticles from "./components/body/subArticles";
 import Profile from "./pages/profiles/Profile";
-import UserProfile from "./pages/profiles/UserProfile";
 import Footer from "./components/footer/footer";
 import { Routes, Route } from "react-router-dom";
 import CreateArticle from "./components/articlesPage/createPost";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
-  const { articlesData } = useGlobalContext();
+  const { articlesData, name } = useGlobalContext();
   return (
     <div>
       <Navbar />
+      <Toaster position="bottom-center" />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -28,9 +29,8 @@ const App = () => {
           element={<ArticlePost articles={articlesData} />}
         />
         <Route path="/subArticles" element={<SubArticles />} />
-        <Route path="/jamesisrael" element={<Profile />} />
-        <Route path="/jamesisrael" element={<UserProfile />} />
-        <Route path="/admin/jamesisrael/new-post" element={<CreateArticle />} />
+        <Route path={`/@${name}`} element={<Profile />} />
+        <Route path={`/admin/@${name}/new-post`} element={<CreateArticle />} />
       </Routes>
       <Footer />
     </div>

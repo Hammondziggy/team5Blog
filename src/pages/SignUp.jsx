@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../components/context";
 
 const SignUp = () => {
-  const { message, signIn, setEmail, setPassword, email, password } =
+  const { message, signIn, setEmail, setPassword, email, password, loading } =
     useGlobalContext();
 
   // SIGN IN FUNCTION OF EXISTING USERS
@@ -29,7 +29,7 @@ const SignUp = () => {
           <span
             style={{
               fontWeight: "bold",
-              color: "red",
+              color: "green",
             }}
           >
             {message}
@@ -53,7 +53,11 @@ const SignUp = () => {
           className="w-full text-cards-light bg-hover-dark p-2 round my-4"
           onClick={() => signIn()}
         >
-          SIGN IN
+          {!loading ? (
+            "SIGN IN"
+          ) : (
+            <i className="bx bxs-bullseye bx-spin bx-sm"></i>
+          )}
         </button>
       </div>
       <div className="createAccount">

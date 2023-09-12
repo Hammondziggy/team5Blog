@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -37,6 +38,7 @@ export const ContextApp = ({ children }) => {
   const [role, setRole] = useState(null);
   const [commentsAvailability, setCommentAvailability] = useState(true);
   const [textContent, setTextContent] = useState("");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   //  const [display, setDisplay] = useState("Add User");
 
@@ -80,12 +82,30 @@ export const ContextApp = ({ children }) => {
     getUser();
   }, []);
 
+  const handleOnlineStatusChange = () => {
+    setIsOnline(navigator.onLine);
+  };
+
+  useEffect(() => {
+    window.addEventListener("online", handleOnlineStatusChange);
+    window.addEventListener("offline", handleOnlineStatusChange);
+
+    return () => {
+      window.removeEventListener("online", handleOnlineStatusChange);
+      window.removeEventListener("offline", handleOnlineStatusChange);
+    };
+  }, []);
+
   const getPosts = async () => {
     const data = await getDocs(posts);
-    let postData = data.docs.map((item) => {
-      return { ...item.data(), id: item.id };
-    });
-    setArticlesData(postData);
+    if (data) {
+      let postData = data.docs.map((item) => {
+        return { ...item.data(), id: item.id };
+      });
+      setArticlesData(postData);
+    } else {
+      toast.error("Unable To Fetch Article. Please Try Reloading Your Page");
+    }
   };
 
   useEffect(() => {
@@ -96,19 +116,19 @@ export const ContextApp = ({ children }) => {
   const auth = getAuth(app);
 
   const createAccount = () => {
-    if (validator.isEmail(newEmail)) {
-      setEmailValidMessage("Great!!");
-    } else {
-      setEmailValidMessage("Please, enter valid Email!");
+    if (!validator.isEmail(newEmail)) {
+      toast.error("Please, enter valid Email!");
+      return;
     }
     if (!name) {
-      alert("Please put a Name");
+      toast.error("No Name");
       return;
     }
     if (!confirmNewPassword || confirmNewPassword !== newPassword) {
-      alert("confirm password should equal password");
+      toast.error("Password Not Matched");
       return;
     }
+    setLoading(true);
     createUserWithEmailAndPassword(auth, newEmail, newPassword)
       .then((userCredential) => {
         // Signed in
@@ -116,23 +136,28 @@ export const ContextApp = ({ children }) => {
         if (user) {
           navigate("/signin");
           setTimeout(() => {
-            alert("Success, now you can Log in");
+            toast.success("Success, now you can Log in");
           }, 500);
           addUser(user.email, user.uid);
         }
+        setLoading(false);
+        setName("");
+        setNewEmail("");
+        setNewPassword("");
+        setConfirmNewPassword("");
       })
       .catch((error) => {
         const errorCode = error.code;
-        alert(errorCode);
+        toast.error(errorCode);
       });
   };
 
   const signIn = () => {
-    if (validator.isEmail(email)) {
-      setMessage("Thank you");
-    } else {
-      setMessage("Please, enter valid Email!");
+    if (!validator.isEmail(email)) {
+      toast.error("Please, Enter A Valid Email!");
+      return;
     }
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -141,15 +166,17 @@ export const ContextApp = ({ children }) => {
           localStorage.setItem("user", user.uid);
           navigate("/");
           setTimeout(() => {
-            alert("Success");
+            toast.success("Success");
           }, 500);
         }
         getUser();
         setPassword("");
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         const errorCode = error.code;
-        alert(errorCode);
+        toast.error(errorCode);
       });
   };
 
@@ -166,7 +193,6 @@ export const ContextApp = ({ children }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
       setError(true);
     }
   };

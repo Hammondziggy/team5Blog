@@ -46,7 +46,7 @@ const Admin = ({ close }) => {
           <p className="text-sm">{email}</p>
           <h6 className="mt-2 font-serif text-3xl">{name}</h6>
           <Link
-            to="/admin/jamesisrael/new-post"
+            to={`/admin/@${name}/new-post`}
             className="capitalize text-xs text-hover-dark mt-2 cursor-pointer flex items-center gap-1 dark:text-light-body dark:hover:text-border-light "
           >
             <i className="bx bxs-edit bx-sm"></i> Write Code
@@ -59,7 +59,7 @@ const Admin = ({ close }) => {
           >
             <i className="bx bxs-user-detail bx-sm text-hover-dark"></i>
             <Link
-              to="/jamesisrael"
+              to={`/@${name}`}
               className="flex-1 self-center pl-1 text-sm dark:hover:text-border-light"
             >
               Profile

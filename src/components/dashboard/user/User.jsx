@@ -33,7 +33,7 @@ const User = () => {
           >
             <i className="bx bxs-user-detail bx-sm text-hover-dark"></i>
             <Link
-              to={"/jamesisrael"}
+              to={`/@${name}`}
               className="flex-1 self-center pl-1 text-sm dark:hover:text-border-light"
             >
               Profile

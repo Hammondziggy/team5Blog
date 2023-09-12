@@ -1,62 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // import { mockData } from './mock';
-import {useGlobalContext} from "../context"
+import { useGlobalContext } from "../context";
 
 const HeaderAndFilter = ({ categories, onCategoryChange }) => {
-    const defaultCategory = 'Latest Articles';
-    console.log(categories)
-    
-    const { articlesData } = useGlobalContext();
-    const [searchCategory, setSearchCategory] = useState(defaultCategory);
-    const [recentCategories, setRecentCategories] = useState([]);
+  const defaultCategory = "Latest Articles";
 
-    useEffect(() => {
-        const categoryTimestamps = [];
+  const { articlesData } = useGlobalContext();
+  const [searchCategory, setSearchCategory] = useState(defaultCategory);
+  const [recentCategories, setRecentCategories] = useState([]);
 
-        categories.forEach((category) => {
-            const articlesInCategory = articlesData.filter((article) => article.category
-            .toLowerCase() === category.toLowerCase());
+  useEffect(() => {
+    const categoryTimestamps = [];
 
-            if (articlesInCategory.length > 0) {
-                const mostRecentTimestamp = Math.max(...articlesInCategory
-                    .map((article) => article.timestamp));
-                categoryTimestamps[category] = mostRecentTimestamp;
-            }
-        });
+    categories.forEach((category) => {
+      const articlesInCategory = articlesData.filter(
+        (article) => article.category.toLowerCase() === category.toLowerCase()
+      );
 
-        const sortedCategories = categories.sort((a, b) => {
-            return categoryTimestamps[b] - categoryTimestamps[a];
-        });
+      if (articlesInCategory.length > 0) {
+        const mostRecentTimestamp = Math.max(
+          ...articlesInCategory.map((article) => article.timestamp)
+        );
+        categoryTimestamps[category] = mostRecentTimestamp;
+      }
+    });
 
-        // Use setRecentCategories to update the state with the sorted categories.
-        setRecentCategories(sortedCategories.slice(0, 3));
+    const sortedCategories = categories.sort((a, b) => {
+      return categoryTimestamps[b] - categoryTimestamps[a];
+    });
 
-        setSearchCategory(defaultCategory);
-    }, [categories]);
+    // Use setRecentCategories to update the state with the sorted categories.
+    setRecentCategories(sortedCategories.slice(0, 3));
 
-    const handleCategoryChange = (category) => {
-        setSearchCategory(category);
-        onCategoryChange(category);
-    };
+    setSearchCategory(defaultCategory);
+  }, [categories]);
 
-    return (
-        <div className="flex flex-col gap-4 md:flex-row font-sans items-center justify-between m-10 mb-8">
-            <h1 className="text-3xl font-semibold">Latest Articles</h1>
-            <div className="flex items-center">
-                {recentCategories.map((category, index) => (
-                    <button
-                        key={index}
-                        className={`px-2 py-1 border rounded mr-2 group hover:bg-cards-light transition duration-300 ${
-                            searchCategory.toLowerCase() === category.toLowerCase() ? 'bg-blue-500 text-white' : ''
-                        }`}
-                        onClick={() => handleCategoryChange(category)}
-                    >
-                        {category}
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
+  const handleCategoryChange = (category) => {
+    setSearchCategory(category);
+    onCategoryChange(category);
+  };
+
+  return (
+    <div className="flex flex-col gap-4 md:flex-row font-sans items-center justify-between m-10 mb-8">
+      <h3 className="relative inline-block font-semibold lg:font-bold  text-light-header dark:text-dark-header font-sans uppercase">
+        Latest Articles
+      </h3>
+      <div className="flex items-center">
+        {recentCategories.map((category, index) => (
+          <button
+            key={index}
+            className={`px-2 py-1 border rounded mr-2 group hover:bg-cards-light dark:hover:bg-[#ccc] dark:border-border-dark dark:text-dark-text transition duration-300 ${
+              searchCategory.toLowerCase() === category.toLowerCase()
+                ? "bg-blue-500 text-white"
+                : ""
+            }`}
+            onClick={() => handleCategoryChange(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default HeaderAndFilter;

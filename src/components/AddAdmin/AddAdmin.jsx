@@ -34,7 +34,6 @@ const AddAdmin = () => {
     );
   });
 
-  console.log(user);
   const uEle = user.map((data) => {
     const { userName, userEmail, userId, id, role } = data;
     return (

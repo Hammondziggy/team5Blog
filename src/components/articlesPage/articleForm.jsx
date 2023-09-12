@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useGlobalContext } from "../context";
 import QuillEditor from "./editor";
 import ArticlePreview from "./preview";
-import UploadImg from "../articlesPage/uploadImg"
+import UploadImg from "../articlesPage/uploadImg";
 
 const ArticleForm = ({ onSubmit }) => {
   const { error, loading, setSelectedImg } = useGlobalContext();
@@ -10,7 +10,7 @@ const ArticleForm = ({ onSubmit }) => {
   const [editorHtml, setEditorHtml] = useState("");
   const [category, setCategory] = useState("");
   const [showPreview, setShowPreview] = useState(false);
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
     onSubmit({ title, category, editorHtml });
@@ -35,16 +35,16 @@ const ArticleForm = ({ onSubmit }) => {
   const togglePreview = () => {
     setShowPreview(!showPreview);
   };
-
+  // Hello World
   const isFormValid = title && editorHtml && category !== "None";
   return (
     <div className="max-w-screen-md min-h-screen mx-auto p-6 bg-white rounded-lg mt-6">
-      <h2 className="text-center text-2xl font-semibold mb-4">
-        Create New Article
+      <h2 className="text-center font-sans text-3xl font-semibold mb-4">
+        Create Post
       </h2>
       <form
         onSubmit={handleSubmit}
-        className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md dark:shadow-cards-light"
+        className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md dark:shadow-cards-light mb-10"
       >
         {showPreview ? (
           <ArticlePreview
